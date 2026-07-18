@@ -67,9 +67,15 @@ export function Plate({ section, index, label, aspect, src }: PlateProps) {
         >
           {src && !failed ? (
             <img
+              ref={(node) => {
+                // Handle the case where the image is already cached/complete
+                // before React attaches the onLoad handler.
+                if (node && node.complete && node.naturalWidth > 0) {
+                  setLoaded(true)
+                }
+              }}
               src={src || "/placeholder.svg"}
               alt={label}
-              crossOrigin="anonymous"
               className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"}`}
               onLoad={() => setLoaded(true)}
               onError={() => setFailed(true)}
