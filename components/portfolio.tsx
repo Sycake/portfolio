@@ -105,7 +105,7 @@ export function Portfolio() {
                   section="Portfolio"
                   index={item.index}
                   label={item.label}
-                  aspect="16/9"
+                  aspect="11/8.5"
                   src={item.src}
                 />
               ))

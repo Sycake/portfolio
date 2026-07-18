@@ -6,7 +6,7 @@ type PlateProps = {
   section: string
   index: string
   label: string
-  aspect: "16/9" | "3/4"
+  aspect: "11/8.5" | "3/4"
   src?: string
 }
 
