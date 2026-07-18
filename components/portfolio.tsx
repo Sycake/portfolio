@@ -6,15 +6,17 @@ import { TopBar } from "./top-bar"
 
 type View = "portfolio" | "resume"
 
+// Images live in /public/portfolio and /public/resume.
+// Naming format: portfolio-01.jpg … portfolio-12.jpg / resume-01.jpg …
 const PORTFOLIO = Array.from({ length: 12 }, (_, i) => {
   const n = String(i + 1).padStart(2, "0")
-  return { index: n, label: `Portfolio ${n}` }
+  return { index: n, label: `Portfolio ${n}`, src: `/portfolio/portfolio-${n}.jpg` }
 })
 
-const RESUME = [
-  { index: "01", label: "Résumé 01" },
-  { index: "02", label: "Résumé 02" },
-]
+const RESUME = Array.from({ length: 2 }, (_, i) => {
+  const n = String(i + 1).padStart(2, "0")
+  return { index: n, label: `Résumé ${n}`, src: `/resume/resume-${n}.jpg` }
+})
 
 export function Portfolio() {
   const [view, setView] = useState<View>("portfolio")
@@ -104,6 +106,7 @@ export function Portfolio() {
                   index={item.index}
                   label={item.label}
                   aspect="16/9"
+                  src={item.src}
                 />
               ))
             : RESUME.map((item) => (
@@ -113,6 +116,7 @@ export function Portfolio() {
                   index={item.index}
                   label={item.label}
                   aspect="3/4"
+                  src={item.src}
                 />
               ))}
         </section>
