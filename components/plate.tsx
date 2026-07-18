@@ -7,11 +7,14 @@ type PlateProps = {
   index: string
   label: string
   aspect: "16/9" | "3/4"
+  src?: string
 }
 
-export function Plate({ section, index, label, aspect }: PlateProps) {
+export function Plate({ section, index, label, aspect, src }: PlateProps) {
   const ref = useRef<HTMLElement | null>(null)
   const [visible, setVisible] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     const node = ref.current
@@ -62,12 +65,23 @@ export function Plate({ section, index, label, aspect }: PlateProps) {
           className="relative w-full overflow-hidden bg-[#e3ded4]"
           style={{ aspectRatio: aspect }}
         >
-          {/* Placeholder — swap for a real image later */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-sans text-xs uppercase tracking-[0.32em] text-muted">
-              {label}
-            </span>
-          </div>
+          {src && !failed ? (
+            <img
+              src={src || "/placeholder.svg"}
+              alt={label}
+              crossOrigin="anonymous"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"}`}
+              onLoad={() => setLoaded(true)}
+              onError={() => setFailed(true)}
+            />
+          ) : (
+            // Placeholder shown until a matching image file is added
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-sans text-xs uppercase tracking-[0.32em] text-muted">
+                {label}
+              </span>
+            </div>
+          )}
           <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#00000010]" />
         </div>
       </div>
