@@ -61,11 +61,10 @@ export function Plate({ section, index, label, aspect, src }: PlateProps) {
       {/* Framed image with registration marks */}
       <div className="relative">
         <CropMarks />
-        <div
-          className="relative w-full overflow-hidden bg-[#e3ded4]"
-          style={{ aspectRatio: aspect }}
-        >
-          {src && !failed ? (
+        {src && !failed ? (
+          // Show the full page at its natural aspect ratio — no cropping,
+          // so baked-in titles and layouts stay fully visible.
+          <div className="relative w-full bg-[#e3ded4]">
             <img
               ref={(node) => {
                 // Handle the case where the image is already cached/complete
@@ -76,20 +75,26 @@ export function Plate({ section, index, label, aspect, src }: PlateProps) {
               }}
               src={src || "/placeholder.svg"}
               alt={label}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"}`}
+              className={`block h-auto w-full transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"}`}
               onLoad={() => setLoaded(true)}
               onError={() => setFailed(true)}
             />
-          ) : (
-            // Placeholder shown until a matching image file is added
+            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#00000010]" />
+          </div>
+        ) : (
+          // Placeholder shown until a matching image file is added
+          <div
+            className="relative w-full overflow-hidden bg-[#e3ded4]"
+            style={{ aspectRatio: aspect }}
+          >
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="font-sans text-xs uppercase tracking-[0.32em] text-muted">
                 {label}
               </span>
             </div>
-          )}
-          <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#00000010]" />
-        </div>
+            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#00000010]" />
+          </div>
+        )}
       </div>
     </figure>
   )
